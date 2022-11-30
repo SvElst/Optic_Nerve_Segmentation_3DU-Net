@@ -5,15 +5,15 @@ This repository contains the code for optic nerve (ON) segmentation and quantifi
 ## Content
 - [Preprocessing](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/tree/master/Preprocessing): Folder containing scripts to preprocess and crop input images.
   * [run_preprocessing.sh](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Preprocessing/run_preprocessing.sh): Apply entire preprocessing pipeline and cropping to all subjects in data folder.
-  * [preprocess](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Preprocessing/preprocess.sh): Preprocessing pipeline with reorientation, bias field correction, rotation and isotropic resampling.
-  * [crop_images](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Preprocessing/crop_images.sh): Crop input image into two VOIs around eyes and ON. 
+  * [preprocess.sh](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Preprocessing/preprocess.sh): Preprocessing pipeline with reorientation, bias field correction, rotation and isotropic resampling.
+  * [crop_images.sh](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Preprocessing/crop_images.sh): Crop input image into two VOIs around eyes and ON. 
   * [create_Eyemasks_3DHough.sh](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Preprocessing/create_Eyemasks_3DHough.sh): Eye and centroid detection using ITK 3D HoughTransform. 
   * [find_rotation_matrix.py](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Preprocessing/find_rotation_matrix.py): Determine angle and rotation matrix between eye centroids
 
 
 - [Segmentation](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/tree/master/Segmentation): Folder containing scripts to train and test a U-Net for ON segmentation.
    * [augmentation.py](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Segmentation/augmentation.py): Data augmentation
-   * [DataGenerator.py](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Segmentation/DataGenerator.py): Contains the class ==DataGenerator== to generate batches of data
+   * [DataGenerator.py](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Segmentation/DataGenerator.py): Contains the class `DataGenerator` to generate batches of data
    * [load_data.py](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Segmentation/load_data.py): Load images into memmory maps to restrict memmory consumption
    * [losses_metrics.py](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Segmentation/losses_metrics.py): Includes various loss functions and performance evaluation metrics.
    * [predict.py](https://github.com/SvElst/Optic_Nerve_Segmentation_3DU-Net/blob/master/Segmentation/predict.py): Function to produce segmentations (as nifty) and performance results on specified evaluation metrics.
@@ -38,6 +38,17 @@ Tools from [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki) and [ITK](https://itk.o
 
 ## Usage
 
+### Data structure
+Data should be structured as follows:
+
+    Data folder
+    	 └── Subject1
+			└── fiesta.nii.gz
+			└── gt_OD-label.nii.gz 			# Right ON label
+			└── gt_OS-label.nii.gz			# Left  ON label	        	
+		 └── Subject2
+		 └── etc.
+
 ### Preprocessing
 To apply the entire preprocessing pipeline and cropping to all subjects in data folder, run the following command: 
 ```bash
@@ -59,14 +70,14 @@ python3 ./Segmentation/test.py --datadir <> --folderdir <> --model <> --inputsiz
 
 **Required options**
 * Data/save options:
-	* --datadir: path to folder containing data
-	* --folderdir: main working folder, in which output is saved
-	* --output_prefix: name to save output (models, images,validation results and history) [training only]
+	* --datadir = path to folder containing data
+	* --folderdir = main working folder, in which output is saved
+	* --output_prefix = name to save output (models, images,validation results and history) [training only]
     * --model = path to trained model [testing only]
 
 * Input options:
 	* --inputsize = size of iput image, should be dividable by two
-	* --channels = sequence type, can be more than 1 when multiple sequences are used for segmentation (options: fiesta, t2, t1c)
+	* --channels = sequence type (options: fiesta). Can be more than one when multiple sequences are used for segmentation. Subject folders should then include {sequence}.nii.gz file for each sequence. 
 	* --classes = classes to segment, if>1: multiclass segmentation, otherwise: binary segmentation (options: Opticus, Eye, Tumor)
 		* NOTE: Classes and its GT numerical values should be adapted in 'load_data.py' for each dataset accordingly
 

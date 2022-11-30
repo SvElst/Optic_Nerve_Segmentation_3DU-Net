@@ -93,12 +93,10 @@ if not os.path.exists(memmap_path + 'memmaps'):
 # Initialize memmory maps    
 fp_shape = (len(SUBJIDS)*2,patch_size[0],patch_size[1], patch_size[2])
 fp_images_fiesta = np.memmap(memmap_path + 'memmaps/images_fiesta.dat',dtype=np.float32,mode='w+',shape=fp_shape)
-fp_images_t1c = np.memmap(memmap_path + 'memmaps/images_t1c.dat',dtype=np.float32,mode='w+',shape=fp_shape)
-fp_images_t2 = np.memmap(memmap_path + 'memmaps/images_t2.dat',dtype=np.float32,mode='w+',shape=fp_shape)
 fp_images_gt =  np.memmap(memmap_path + 'memmaps/images_gt.dat',dtype=np.short,mode='w+',shape=fp_shape)
 
 # Initialize to zero / false
-del fp_images_fiesta, fp_images_t1c, fp_images_t2, fp_images_gt
+del fp_images_fiesta,  fp_images_gt
 
 #%% Load data
 """ For all subjects in list subjids, data is loaded into the memmory maps. 

@@ -27,7 +27,7 @@ fi
 # Run a job for every Patient
 ##
 radius=6
-for DIR in $DATADIR/ERIC*
+for DIR in $DATADIR/Subject*
 do
         SUBJID=${DIR##/*/}
 

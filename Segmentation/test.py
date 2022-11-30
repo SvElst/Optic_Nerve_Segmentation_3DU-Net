@@ -36,8 +36,8 @@ parser.add_option('--model', action="store", dest="model_fname", default="")
 parser.add_option('--datadir', action="store", dest="datadir",help="Data directory",default="")
 parser.add_option('--folderdir', action="store", dest="folderdir",help="Folder directory",default="") 
 parser.add_option('--batch_size', action="store", type="int", dest="batch_size", help="Batch size",default=1)
-parser.add_option('--channels',action="append",type="string",dest="channels", default=[])  # Important one last
-parser.add_option('--threshold', action="store", type="float", dest="threshold", help="",default=0.5)        # Thresholds to binarize image
+parser.add_option('--channels',action="append",type="string",dest="channels", default=[])  
+parser.add_option('--threshold', action="store", type="float", dest="threshold", help="",default=0.5)        # Threshold to binarize image
 parser.add_option('--classes',action="append",type="string", dest="classes", default=[])
 parser.add_option('--inputsize',action="store",type="int", dest="inputsize", nargs=3) 
 
@@ -69,12 +69,10 @@ if not os.path.exists(memmap_path + 'memmaps'):
 # Initialize memmory maps    
 fp_shape = (len(SUBJIDS)*2,patch_size[0],patch_size[1], patch_size[2])
 fp_images_fiesta = np.memmap(memmap_path + 'memmaps/images_fiesta.dat',dtype=np.float32,mode='w+',shape=fp_shape)
-fp_images_t1c = np.memmap(memmap_path + 'memmaps/images_t1c.dat',dtype=np.float32,mode='w+',shape=fp_shape)
-fp_images_t2 = np.memmap(memmap_path + 'memmaps/images_t2.dat',dtype=np.float32,mode='w+',shape=fp_shape)
 fp_images_gt =  np.memmap(memmap_path + 'memmaps/images_gt.dat',dtype=np.short,mode='w+',shape=fp_shape)
 
 # Initialize to zero / false
-del fp_images_fiesta, fp_images_t1c, fp_images_t2, fp_images_gt
+del fp_images_fiesta, fp_images_gt
 
 #%% Load data
 subjid_list = load_data.load(SUBJIDS,datadir,nclasses,classes, channels, patch_size, memmap_path, fp_shape)

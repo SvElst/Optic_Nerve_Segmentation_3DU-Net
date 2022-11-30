@@ -30,8 +30,8 @@ if [ ! -e ${WORKDIR}/fiesta.nii.gz ]
 then
 	echo "Reorient images"
         fslreorient2std ${SUBJDIR}/fiesta.nii ${WORKDIR}/fiesta
-        fslreorient2std ${SUBJDIR}/GT_OD-label.nii.gz ${WORKDIR}/gt_OD-label
-        fslreorient2std ${SUBJDIR}/GT_OS-label.nii.gz ${WORKDIR}/gt_OS-label
+        fslreorient2std ${SUBJDIR}/gt_OD-label.nii.gz ${WORKDIR}/gt_OD-label
+        fslreorient2std ${SUBJDIR}/gt_OS-label.nii.gz ${WORKDIR}/gt_OS-label
 
 	echo "Bias field correction"
 	N4BiasFieldCorrection -d 3 -i ${WORKDIR}/fiesta.nii.gz -o ${WORKDIR}/fiesta.nii.gz
